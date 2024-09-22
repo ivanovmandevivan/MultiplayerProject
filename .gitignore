@@ -74,3 +74,7 @@ Saved/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+/Project/Saved
+/Project/Intermediate
+/Project/Binaries
+/Project/Intermediate
