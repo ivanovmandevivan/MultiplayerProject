@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MultiplayerProject.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\UnrealEngineProjects\MultiplayerProject\Intermediate\Build\Win64\x64\MultiplayerProjectEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"D:\UnrealEngineProjects\MultiplayerProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\MultiplayerProject\MultiplayerProject.cpp.obj"
+"D:\UnrealEngineProjects\MultiplayerProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\MultiplayerProject\Default.rc2.res"
+/OUT:"D:\UnrealEngineProjects\MultiplayerProject\Intermediate\Build\Win64\x64\UnrealEditor\Development\MultiplayerProject\UnrealEditor-MultiplayerProject.lib"

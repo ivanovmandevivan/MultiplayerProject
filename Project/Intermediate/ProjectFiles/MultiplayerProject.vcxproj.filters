@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\MultiplayerProject.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\MultiplayerProject.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\MultiplayerProjectEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\MultiplayerProject">
+      <UniqueIdentifier>{FA2F8E47-F284-3672-AFA0-135E508C9BBE}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\MultiplayerProject\MultiplayerProject.Build.cs">
+      <Filter>Source\MultiplayerProject</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\MultiplayerProject\MultiplayerProject.cpp">
+      <Filter>Source\MultiplayerProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MultiplayerProject\MultiplayerProject.h">
+      <Filter>Source\MultiplayerProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
