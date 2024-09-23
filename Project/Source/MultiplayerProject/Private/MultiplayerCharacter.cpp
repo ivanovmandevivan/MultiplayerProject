@@ -6,11 +6,15 @@
 
 // Online -> OnlineSubSystem
 #include "OnlineSubsystem.h"
+#include "Online/OnlineSessionNames.h"
 #include "OnlineSessionSettings.h"
 
+
+
 // Sets default values
-AMultiplayerCharacter::AMultiplayerCharacter() 
-		: OnCreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete))
+AMultiplayerCharacter::AMultiplayerCharacter()
+		: OnCreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionComplete)),
+		OnFindSessionCompleteDelegate(FOnFindSessionsCompleteDelegate::CreateUObject(this, &ThisClass::OnFindSessionsComplete))
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -92,6 +96,7 @@ void AMultiplayerCharacter::CreateGameSession()
 		SessionSettings->bAllowJoinViaPresence = true;
 		SessionSettings->bShouldAdvertise = true;
 		SessionSettings->bUsesPresence = true;
+		SessionSettings->bUseLobbiesIfAvailable = true;
 
 		const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
 		bool bSuccessful = OnlineSessionInterface->CreateSession(*LocalPlayer->GetPreferredUniqueNetId(), NAME_GameSession, *SessionSettings);
@@ -100,6 +105,27 @@ void AMultiplayerCharacter::CreateGameSession()
 				UE_LOG(LogTemp, Warning, TEXT("Unsuccessfully created a session! Please check CreateGameSession()"));
 				return;
 		}
+}
+
+void AMultiplayerCharacter::JoinGameSession()
+{
+		if (!OnlineSessionInterface)
+		{
+				return;
+		}
+
+		// Add to Delegate List:
+		OnlineSessionInterface->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionCompleteDelegate);
+
+		// Find Game Session:
+		SessionSearch = MakeShareable(new FOnlineSessionSearch());
+
+		SessionSearch->MaxSearchResults = 10000;
+		SessionSearch->bIsLanQuery = false;
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+
+		const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
+		OnlineSessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), SessionSearch.ToSharedRef());
 }
 
 void AMultiplayerCharacter::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
@@ -118,6 +144,28 @@ void AMultiplayerCharacter::OnCreateSessionComplete(FName SessionName, bool bWas
 						GEngine->AddOnScreenDebugMessage(
 								-1, 15.f, FColor::Red,
 								FString(TEXT("Failed to create session!"))
+						);
+				}
+		}
+}
+
+void AMultiplayerCharacter::OnFindSessionsComplete(bool bWasSuccessful)
+{
+		if (!SessionSearch)
+		{
+				return;
+		}
+
+		for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
+		{
+				const FString& SessionId = SearchResult.GetSessionIdStr();
+				const FString& User = SearchResult.Session.OwningUserName;
+
+				if (GEngine)
+				{
+						GEngine->AddOnScreenDebugMessage(
+								-1, 15.f, FColor::Cyan,
+								FString::Printf(TEXT("ID: %s, User: %s"), *SessionId, *User)
 						);
 				}
 		}
