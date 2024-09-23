@@ -4,6 +4,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 
+// Online -> OnlineSubSystem
+#include "Interfaces/OnlineSessionInterface.h"
+
 // Generated
 #include "MultiplayerCharacter.generated.h"
 
@@ -16,16 +19,16 @@ public:
 	// Sets default values for this character's properties
 	AMultiplayerCharacter();
 
-protected:
+	/* Begin ACharacter overrides */
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	/* End ACharacter overrides */
 
 	UFUNCTION(BlueprintCallable)
 	void OpenLobby();
@@ -37,5 +40,16 @@ public:
 	void CallClientTravel(const FString& InAddress);
 
 	/* Pointer to the online session interface */
-	TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSessionInterface;
+	IOnlineSessionPtr OnlineSessionInterface;
+
+protected:
+		UFUNCTION(BlueprintCallable)
+		void CreateGameSession();
+
+		/* Callback On Create Session Completed */
+		void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+
+private:
+		// Delegates for Session Creation:
+		FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 };
