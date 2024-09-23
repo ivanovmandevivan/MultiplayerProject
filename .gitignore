@@ -80,3 +80,4 @@ DerivedDataCache/*
 /Project/Intermediate/*
 /Project/Plugins/*/Intermediate/*
 /Project/Plugins/*/Binaries/*
+/Project/Build/*

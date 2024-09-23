@@ -36,4 +36,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CallClientTravel(const FString& InAddress);
 
+	/* Pointer to the online session interface */
+	TSharedPtr<class IOnlineSession, ESPMode::ThreadSafe> OnlineSessionInterface;
 };

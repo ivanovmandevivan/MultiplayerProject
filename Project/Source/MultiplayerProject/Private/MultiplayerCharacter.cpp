@@ -4,13 +4,21 @@
 // Engine -> Kismet
 #include "Kismet/GameplayStatics.h"
 
-
+// Online -> OnlineSubSystem
+#include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSubsystem.h"
 
 // Sets default values
 AMultiplayerCharacter::AMultiplayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if (OnlineSubsystem)
+	{
+			OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
+	}
 
 }
 
