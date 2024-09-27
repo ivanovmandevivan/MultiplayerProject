@@ -26,8 +26,12 @@ public class MultiplayerSessions : ModuleRules
 			new string[]
 			{
 				"Core",
-				"OnlineSubsystem",
-				"OnlineSubsystemSteam"
+        "InputCore",
+        "OnlineSubsystem",
+				"OnlineSubsystemSteam",
+				"UMG",
+				"Slate",
+        "SlateCore",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

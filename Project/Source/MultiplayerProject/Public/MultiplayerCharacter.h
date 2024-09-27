@@ -4,9 +4,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 
-// Online -> OnlineSubSystem
-#include "Interfaces/OnlineSessionInterface.h"
-
 // Generated
 #include "MultiplayerCharacter.generated.h"
 
@@ -29,45 +26,4 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	/* End ACharacter overrides */
-
-	UFUNCTION(BlueprintCallable)
-	void OpenLobby();
-
-	UFUNCTION(BlueprintCallable)
-	void CallOpenLevel(const FString& InAddress);
-
-	UFUNCTION(BlueprintCallable)
-	void CallClientTravel(const FString& InAddress);
-
-	/* Pointer to the online session interface */
-	IOnlineSessionPtr OnlineSessionInterface;
-
-protected:
-		UFUNCTION(BlueprintCallable)
-		void CreateGameSession();
-
-		UFUNCTION(BlueprintCallable)
-		void JoinGameSession();
-
-		/* Callback On Create Session Completed */
-		void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
-		
-		/* Callback On Find Session Completed */
-		void OnFindSessionsComplete(bool bWasSuccessful);
-
-		/* Callback On Join Session Completed */
-		void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-
-private:
-		// Delegates for Session Creation:
-		FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
-
-		// Delegate for Finding Session:
-		FOnFindSessionsCompleteDelegate OnFindSessionCompleteDelegate;
-
-		// Delegate for Joining Session Complete:
-		FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
-
-		/* Session Search Query: */
-		TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
