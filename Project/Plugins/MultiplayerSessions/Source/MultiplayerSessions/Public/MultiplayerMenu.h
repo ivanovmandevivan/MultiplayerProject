@@ -25,9 +25,18 @@ public:
 
 protected:
 
-		// 
+		// Begin UUserWidget overrides
 		virtual bool Initialize() override;
 		virtual void NativeDestruct() override;
+		// End UUserWidget overrides
+
+		/**
+		 *  Method that will be bound to the OnCreateSessionComplete event in the MultiplayerSessionSubSystem.
+		 */
+		UFUNCTION()
+		void OnCreateSession(const bool bWasSuccessful);
+		
+
 private:
 
 		UFUNCTION()

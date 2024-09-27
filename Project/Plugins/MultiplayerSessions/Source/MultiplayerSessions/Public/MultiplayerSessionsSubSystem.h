@@ -12,6 +12,11 @@
 // Generated
 #include "MultiplayerSessionsSubSystem.generated.h"
 
+/**
+ * Custom Delegates for the Multiplayer Menu / external customers to bind callbacks to:
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnCreateSessionComplete, const bool, bWasSuccessful);
+
 UCLASS()
 class MULTIPLAYERSESSIONS_API UMultiplayerSessionsSubSystem : public UGameInstanceSubsystem
 {
@@ -49,6 +54,16 @@ public:
 		 * Method binded to the 'StartSessionCompleteDelegate' delegate to start sessions.
 		 */
 		void StartSession();
+
+		/************************************************************************/
+		/* Custom Delegates                                                     */
+		/************************************************************************/
+
+		/**
+		 * Delegate that you bind to whenever you want to detect whenever a session creation was completed.
+		 * It returns a const boolean that determines if the creation of the session was done successfully or not.
+		 */
+		FMultiplayerOnCreateSessionComplete MultiplayerOnCreateSessionComplete;
 
 protected:
 		

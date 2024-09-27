@@ -41,6 +41,12 @@ void UMultiplayerMenu::SetupMenu(const int32 InNumPublicConnections, const FStri
     }
 
     MultiplayerSessionsSubsystem = GameInstance->GetSubsystem<UMultiplayerSessionsSubSystem>();
+    
+    // If this gets fired, the 'MultiplayerSessionsSubSystem' plugin was not enabled or this UUserWidget is used outside of where it is meant to be used.
+    check(MultiplayerSessionsSubsystem);
+
+    // Bind Callbacks:
+    MultiplayerSessionsSubsystem->MultiplayerOnCreateSessionComplete.AddDynamic(this, &ThisClass::OnCreateSession);
 }
 
 bool UMultiplayerMenu::Initialize()
@@ -67,28 +73,48 @@ void UMultiplayerMenu::NativeDestruct()
     Super::NativeDestruct();
 }
 
+void UMultiplayerMenu::OnCreateSession(const bool bWasSuccessful)
+{
+    if (bWasSuccessful)
+    {
+        if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(
+                -1,
+                15.f,
+                FColor::Green,
+                FString(TEXT("Session created successfully!"))
+            );
+        }
+
+        UWorld* World = GetWorld();
+        if (nullptr == World)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("There is no world, unable to host a session, please check that GetWorld() returns a valid world."))
+                return;
+        }
+
+        World->ServerTravel("/Game/Levels/Lobby?listen");
+    }
+    else
+    {
+        if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(
+                -1,
+                15.f,
+                FColor::Red,
+                FString(TEXT("Session created unsuccessfully!"))
+            );
+        }
+    }
+    
+}
+
 void UMultiplayerMenu::HostButtonClicked()
 {
-    if (GEngine)
-    {
-        GEngine->AddOnScreenDebugMessage(
-            -1,
-            15.f,
-            FColor::Yellow,
-            FString(TEXT("Host Button Clicked!"))
-        );
-    }
-
     ensureAlways(MultiplayerSessionsSubsystem);
     MultiplayerSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
-    UWorld* World = GetWorld();
-    if (nullptr == World)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("There is no world, unable to host a session, please check that GetWorld() returns a valid world."))
-        return;
-    }
-
-    World->ServerTravel("/Game/Levels/Lobby?listen");
 }
 
 void UMultiplayerMenu::JoinButtonClicked()
