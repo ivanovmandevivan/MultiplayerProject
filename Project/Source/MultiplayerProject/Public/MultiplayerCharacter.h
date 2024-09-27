@@ -55,12 +55,18 @@ protected:
 		/* Callback On Find Session Completed */
 		void OnFindSessionsComplete(bool bWasSuccessful);
 
+		/* Callback On Join Session Completed */
+		void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+
 private:
 		// Delegates for Session Creation:
 		FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 
 		// Delegate for Finding Session:
 		FOnFindSessionsCompleteDelegate OnFindSessionCompleteDelegate;
+
+		// Delegate for Joining Session Complete:
+		FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
 
 		/* Session Search Query: */
 		TSharedPtr<FOnlineSessionSearch> SessionSearch;
