@@ -6,8 +6,11 @@
 // MultiplayerSessions -> MultiplayerSessions
 #include "MultiplayerSessionsSubSystem.h"
 
-void UMultiplayerMenu::SetupMenu()
+void UMultiplayerMenu::SetupMenu(const int32 InNumPublicConnections, const FString& InTypeOfMatch)
 {
+    NumPublicConnections = InNumPublicConnections;
+    MatchType = InTypeOfMatch;
+
     AddToViewport();
     SetVisibility(ESlateVisibility::Visible);
     SetIsFocusable(true);
@@ -58,6 +61,12 @@ bool UMultiplayerMenu::Initialize()
     return true;
 }
 
+void UMultiplayerMenu::NativeDestruct()
+{
+    TearDownMenu();
+    Super::NativeDestruct();
+}
+
 void UMultiplayerMenu::HostButtonClicked()
 {
     if (GEngine)
@@ -71,7 +80,15 @@ void UMultiplayerMenu::HostButtonClicked()
     }
 
     ensureAlways(MultiplayerSessionsSubsystem);
-    MultiplayerSessionsSubsystem->CreateSession(4, FString("FreeForAll"));
+    MultiplayerSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
+    UWorld* World = GetWorld();
+    if (nullptr == World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("There is no world, unable to host a session, please check that GetWorld() returns a valid world."))
+        return;
+    }
+
+    World->ServerTravel("/Game/Levels/Lobby?listen");
 }
 
 void UMultiplayerMenu::JoinButtonClicked()
@@ -85,4 +102,28 @@ void UMultiplayerMenu::JoinButtonClicked()
             FString(TEXT("Join Button Clicked!"))
         );
     }
+}
+
+void UMultiplayerMenu::TearDownMenu()
+{
+    RemoveFromParent();
+
+    UWorld* World = GetWorld();
+    if (!World)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("There is no world, unable to host a session, please check that GetWorld() returns a valid world."))
+        return;
+    }
+
+    APlayerController* PlayerController = World->GetFirstPlayerController();
+    if (!PlayerController)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not fetch a valid player controller, please check that there is a valid one."))
+        return;
+    }
+
+    FInputModeGameOnly InpuitModeData;
+    PlayerController->SetInputMode(InpuitModeData);
+    PlayerController->SetShowMouseCursor(false);
+
 }

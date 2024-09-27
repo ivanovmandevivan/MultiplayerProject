@@ -90,12 +90,18 @@ private:
 		IOnlineSessionPtr SessionInterface;
 
 		/**
+		 * Last Sessions Settings created for the most recent session.
+		 */
+		TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
+
+		/**
 		 * Delegate fired when a session create request has completed.
 		 */
 		FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
 
 		/**
 		* Delegate handle for the 'CreateSessionCompleteDelegate' event.
+		* We can later remove it from the delegate list with this handle.
 		*/
 		FDelegateHandle CreateSessionCompleteDelegateHandle;
 
@@ -106,6 +112,7 @@ private:
 
 		/**
 		* Delegate handle for the 'FindSessionsCompleteDelegate' event.
+		* We can later remove it from the delegate list with this handle.
 		*/
 		FDelegateHandle FindSessionsCompleteDelegateHandle;
 
@@ -115,7 +122,8 @@ private:
 		FOnJoinSessionCompleteDelegate JoinSessionCompleteDelegate;
 
 		/**
-		* Delegate handle for the 'JoinSessionCompleteDelegate' event.
+		* Delegate handle for the 'JoinSessionCompleteDelegate' event. 
+		* We can later remove it from the delegate list with this handle.
 		*/
 		FDelegateHandle JoinSessionCompleteDelegateHandle;
 
@@ -126,6 +134,7 @@ private:
 
 		/**
 		* Delegate handle for the 'DestroySessionCompleteDelegate' event.
+		* We can later remove it from the delegate list with this handle.
 		*/
 		FDelegateHandle DestroySessionCompleteDelegateHandle;
 
@@ -136,6 +145,7 @@ private:
 
 		/**
 		* Delegate handle for the 'StartSessionCompleteDelegate' event.
+		* We can later remove it from the delegate list with this handle.
 		*/
 		FDelegateHandle StartSessionCompleteDelegateHandle;
 };
